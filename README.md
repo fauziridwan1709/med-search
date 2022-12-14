@@ -1,6 +1,6 @@
 # medsearch
 
-A new Flutter project.
+A Medical Search Flutter Open Source Project. Medical Search Engine.
 
 ## Getting Started
 
