@@ -46,7 +46,10 @@ class _SearchPageState extends State<SearchPage> {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: SearchBar(controller: _searchTextController),
+              child: SearchBar(
+                controller: _searchTextController,
+                onSearchSubmit: () => setState(() {}),
+              ),
             ),
           ],
         ),
@@ -59,6 +62,10 @@ class _SearchPageState extends State<SearchPage> {
                 return Column(
                   children: data.map((e) {
                     return ListTile(
+                      onTap: () {
+                        goRouter
+                            .goNamed('detail-page', params: {'doc': e.text});
+                      },
                       contentPadding: EdgeInsets.zero,
                       title: Text(
                         e.text,
