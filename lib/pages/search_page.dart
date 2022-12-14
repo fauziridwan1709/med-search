@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medsearch/router.dart';
+import 'package:medsearch/services/search_service.dart';
 import 'package:medsearch/widgets/search_bar.dart';
 
 class SearchPage extends StatefulWidget {
@@ -50,24 +51,32 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
         const SizedBox(height: 20),
-        const ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            'Something Title here,',
-            maxLines: 1,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text('something subtitle here'),
-        ),
-        const ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            'Something Title here,',
-            maxLines: 1,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text('something subtitle here'),
-        ),
+        FutureBuilder(
+            future: SearchService.getDocs(_searchTextController.text),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final data = snapshot.data ?? [];
+                return Column(
+                  children: data.map((e) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        e.text,
+                        maxLines: 1,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(e.text),
+                    );
+                  }).toList(),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return const SizedBox();
+            }),
       ],
     ));
   }
